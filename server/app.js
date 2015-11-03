@@ -1,13 +1,20 @@
 var express = require('express');
-var path = require('path');
-
 var app = express();
 
-app.set('port', (process.env.PORT || 5000));
+var bodyParser = require('body-parser');
 
-app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, "./public/views/index.html"));
-});
+var index = require('./routes/index');
+var math = require('./routes/math');
+var multi = require('./routes/multi');
+
+app.set('port', (process.env.PORT || 5000));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({expanded: true}));
+
+
+app.use('/math', math);
+app.use('/math/multi', multi);
+app.use('/', index);
 
 app.listen(app.get('port'), function(){
    console.log("Server us up! Port: " + app.get('port'));
